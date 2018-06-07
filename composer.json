@@ -1,0 +1,20 @@
+{
+    "name": "eliaenor/wadl-client",
+    "description": "An easy to use WADL Client.",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vincent COURTIN",
+            "email": "courtinvincent@msn.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "WADLClient\\": "src/"
+        }
+    }
+}
