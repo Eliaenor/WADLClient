@@ -6,85 +6,85 @@ namespace WADLClient\Tools;
 class XSDBuiltInTypeValidator
 {
     /**
-     * isXsdString match the String format as described in the XMLSchema documentation.
+     * isXSDString match the String format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#string for more information.
      *
      * @param $string
      * @return bool
      */
-    static public function isXsdString($string)
+    static public function isXSDString($string)
     {
         return is_string($string);
     }
 
     /**
-     * isXsdBoolean match the Boolean format as described in the XMLSchema documentation.
+     * isXSDBoolean match the Boolean format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#boolean for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdBoolean(string $var): bool
+    static public function isXSDBoolean(string $var): bool
     {
-        return is_bool($var);
+        return $var === 'true' || $var === 'false' ? true : false;
     }
 
     /**
-     * isXsdDecimal match the Decimal format as described in the XMLSchema documentation.
+     * isXSDDecimal match the Decimal format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#decimal for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdDecimal(string $var): bool
+    static public function isXSDDecimal(string $var): bool
     {
         return is_numeric($var);
     }
 
     /**
-     * isXsdFloat match the Float format as described in the XMLSchema documentation.
+     * isXSDFloat match the Float format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#float for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdFloat(string $var): bool
+    static public function isXSDFloat(string $var): bool
     {
-        return is_float($var);
+        return is_float(strval($var));
     }
 
     /**
-     * isXsdDouble match the Double format as described in the XMLSchema documentation.
+     * isXSDDouble match the Double format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#double for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdDouble(string $var): bool
+    static public function isXSDDouble(string $var): bool
     {
-        return is_double($var);
+        return is_double(strval($var));
     }
 
     /**
-     * isXsdDuration match the Duration format as described in the XMLSchema documentation.
+     * isXSDDuration match the Duration format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#duration for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdDuration(string $var): bool
+    static public function isXSDDuration(string $var): bool
     {
         return preg_match('^(-)?P(?!$)(\d+Y)?(\d+M)?(\d+W)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+(.\d+)?S)?)?$', $var);
     }
 
     /**
-     * isXsdDateTime match the DateTime format as described in the XMLSchema documentation.
+     * isXSDDateTime match the DateTime format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#dateTime for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdDateTime(string $var): bool
+    static public function isXSDDateTime(string $var): bool
     {
         $regExp = '/^-?(?!0{4,}\b)(\d{4,})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.\d+)?(Z|[+-]\d{2}:\d{2})$/';
 
@@ -94,7 +94,7 @@ class XSDBuiltInTypeValidator
 
         $date[1] = self::handleLeapYear($date[1]);
         if (!checkdate($date[2], $date[3], $date[1])
-            || ($date[4] == 24 && $date[5] != 00 || $date[6] != 00)
+            || ($date[4] == 24 && ($date[5] != 00 || $date[6] != 00))
             || $date[4] >= 24 || $date[5] >= 60 || $date[6] >= 60) {
             return false;
         }
@@ -107,13 +107,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdTime match the Time format as described in the XMLSchema documentation.
+     * isXSDTime match the Time format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#time for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdTime(string $var): bool
+    static public function isXSDTime(string $var): bool
     {
         $regExp = '/^(\d{2}):(\d{2}):(\d{2})(.\d+)?(Z|[+-]\d{2}:\d{2})$/';
 
@@ -134,13 +134,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdDate match the Date format as described in the XMLSchema documentation.
+     * isXSDDate match the Date format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#date for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdDate(string $var): bool
+    static public function isXSDDate(string $var): bool
     {
         $regExp = '/^-?(?!0{4,}\b)(\d{4,})-(\d{2})-(\d{2})(Z|[+-]\d{2}:\d{2})?$/';
 
@@ -161,13 +161,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdGYearMonth match the GYearMonth format as described in the XMLSchema documentation.
+     * isXSDGYearMonth match the GYearMonth format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#gYearMonth for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdGYearMonth(string $var): bool
+    static public function isXSDGYearMonth(string $var): bool
     {
         $regExp = '/^-?(?!0{4,}\b)(\d{4,})-(\d{2})(Z|[+-]\d{2}:\d{2})?$/';
 
@@ -188,13 +188,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdGYear match the GYear format as described in the XMLSchema documentation.
+     * isXSDGYear match the GYear format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#gYear for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdGYear(string $var): bool
+    static public function isXSDGYear(string $var): bool
     {
         $regExp = '/^-?(?!0{4,}\b)(\d{4,})(Z|[+-]\d{2}:\d{2})?$/';
 
@@ -212,13 +212,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdGMonthDay match the GMonthDay format as described in the XMLSchema documentation.
+     * isXSDGMonthDay match the GMonthDay format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#gMonthDay for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdGMonthDay(string $var): bool
+    static public function isXSDGMonthDay(string $var): bool
     {
         $regExp = '/^--(\d{2})-(\d{2})(Z|[+-]\d{2}:\d{2})$/';
 
@@ -238,13 +238,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdGDay match the GDay format as described in the XMLSchema documentation.
+     * isXSDGDay match the GDay format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#gDay for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdGDay(string $var): bool
+    static public function isXSDGDay(string $var): bool
     {
         $regExp = '/^---(\d{2})(Z|[+-]\d{2}:\d{2})$/';
 
@@ -264,13 +264,13 @@ class XSDBuiltInTypeValidator
     }
 
     /**
-     * isXsdGMonth match the GMonth format as described in the XMLSchema documentation.
+     * isXSDGMonth match the GMonth format as described in the XMLSchema documentation.
      * See https://www.w3.org/TR/xmlschema-2/#gMonth for more information.
      *
      * @param string $var
      * @return bool
      */
-    static public function isXsdGMonth(string $var): bool
+    static public function isXSDGMonth(string $var): bool
     {
         $regExp = '/^--(\d{2})(Z|[+-]\d{2}:\d{2})$/';
 
@@ -365,7 +365,7 @@ class XSDBuiltInTypeValidator
      */
     static public function isXSDNormalizedString(string $var): bool
     {
-        return self::isXsdString($var) && !preg_match('/[\n\r\t]/', $var);
+        return self::isXSDString($var) && !preg_match('/[\n\r\t]/', $var);
     }
 
     /**
@@ -547,7 +547,7 @@ class XSDBuiltInTypeValidator
      */
     static public function isXSDLong(string $var): bool
     {
-        return self::isXSDInteger($var) && is_long($var);
+        return self::isXSDInteger($var) && $var <= 9223372036854775807 && $var >= -9223372036854775808;
     }
 
     /**
@@ -559,7 +559,7 @@ class XSDBuiltInTypeValidator
      */
     static public function isXSDInt(string $var): bool
     {
-        return self::isXSDLong($var) && is_int($var);
+        return self::isXSDLong($var) && is_int(intval($var));
     }
 
     /**
