@@ -3,6 +3,7 @@
 namespace WADLClient\Resources;
 
 use WADLClient\Tools\ArrayToXmlConverter;
+use WADLClient\Tools\XSDBuiltInTypeValidator;
 
 class ResourcesWadl
 {
@@ -72,7 +73,7 @@ class ResourcesWadl
             );
         }
         if (is_string($schemaDefinition)) {
-            //Handle XML TYPE
+            $this->validateXsdBuildInType($schemaDefinition, $arguments, $rootName);
             return $arguments;
         }
         foreach ($schemaDefinition as $key => $typeDesc) {
@@ -90,6 +91,19 @@ class ResourcesWadl
         }
 
         return $arguments;
+    }
+
+    private function validateXsdBuildInType(string $type, $argument, $rootName): bool
+    {
+        $methodName = 'isXSD'. ucfirst($type);
+
+        if (!XSDBuiltInTypeValidator::$methodName($argument)) {
+            throw new \InvalidArgumentException(
+                sprintf("Key '%s' must be a valid XSDType %s.", $rootName, $type)
+            );
+        }
+
+        return true;
     }
 
     /**

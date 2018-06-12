@@ -176,6 +176,6 @@ class WadlResourcesFactory
      */
     private function resolveXmlType(string $typeName): string
     {
-        return 'XML_TYPE';
+        return $typeName;
     }
 }
