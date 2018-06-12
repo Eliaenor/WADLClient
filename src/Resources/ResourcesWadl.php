@@ -90,9 +90,33 @@ class ResourcesWadl
             }
         }
 
-        return $arguments;
+        return $this->orderAssociativeArrayByList(array_keys($schemaDefinition), $arguments);
     }
 
+    /**
+     * @param array $list
+     * @param array $array
+     * @return array
+     */
+    private function orderAssociativeArrayByList(array $list, array $array)
+    {
+        $result = [];
+
+        foreach ($list as $key) {
+            if (isset($array[$key])) {
+                $result[$key] = $array[$key];
+            }
+        }
+
+        return array_merge($result, array_diff_key($array, $result));
+    }
+
+    /**
+     * @param string $type
+     * @param $argument
+     * @param $rootName
+     * @return bool
+     */
     private function validateXsdBuildInType(string $type, $argument, $rootName): bool
     {
         $methodName = 'isXSD'. ucfirst($type);
@@ -134,7 +158,7 @@ class ResourcesWadl
                     );
                 }
             }
-            
+
             if (is_numeric($max)) {
                 if ($index > $max) {
                     throw new \InvalidArgumentException(
@@ -143,8 +167,10 @@ class ResourcesWadl
                 }
             }
             $this->checkArrayKey($key, $arguments, $rootName);
+
             return true;
         }
+
         return false;
     }
 
