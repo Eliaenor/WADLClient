@@ -14,7 +14,11 @@ class WadlClient
     /** @var ResourcesWadl[] */
     private $resourcesList;
 
-    public function __construct(string $xmlUri)
+    /**
+     * @param string $xmlUri
+     * @return $this
+     */
+    public function initialize(string $xmlUri)
     {
         if (!$this->validateWadl($xmlUri)) {
             throw new \LogicException(sprintf('The xml provided does not respect WADL syntax. Please check you file.'));
@@ -33,6 +37,15 @@ class WadlClient
         return $this;
     }
 
+    /**
+     * @param ResourcesWadl $request
+     * @param string $method
+     * @param string $mediaType
+     * @param $arguments
+     * @return array
+     * 
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function sendRequest(ResourcesWadl $request, string $method, string $mediaType, $arguments)
     {
         $body = $request->getBody($method, $mediaType, $arguments);
