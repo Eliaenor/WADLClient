@@ -203,12 +203,12 @@ class ResourcesWadl
     {
         if (!array_key_exists($method, $this->methodList)){
             throw new \InvalidArgumentException(
-                sprintf('method %s not allowed for this resource. Method Allowed : ', $method, implode(', ', array_keys($this->methodList)))
+                sprintf('Method %s not allowed for this resource. Method Allowed : %s', $method, implode(', ', array_keys($this->methodList)))
             );
         }
         if (!in_array($mediaType, $this->methodList[$method]['requestMediaTypes'])){
             throw new \InvalidArgumentException(
-                sprintf('mediaType %s not allowed for this method. MediaType Allowed : ', $mediaType, implode(', ', $this->methodList[$method]['requestMediaTypes']))
+                sprintf('MediaType %s not allowed for this method. MediaType Allowed : %s', $mediaType, implode(', ', $this->methodList[$method]['requestMediaTypes']))
             );
         }
         if (!isset($this->schema[$method]['request'][$mediaType])) {
